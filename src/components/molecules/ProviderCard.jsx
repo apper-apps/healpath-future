@@ -14,7 +14,7 @@ const ProviderCard = ({ provider }) => {
     >
       <div className="p-6">
         <div className="flex items-start gap-4 mb-4">
-          <img
+<img
             src={provider.photo}
             alt={provider.name}
             className="w-16 h-16 rounded-full object-cover flex-shrink-0"
@@ -31,7 +31,7 @@ const ProviderCard = ({ provider }) => {
                 <span className="text-sm text-gray-600 ml-1">{provider.rating}</span>
               </div>
               <span className="text-gray-300">•</span>
-              <span className="text-sm text-gray-600">
+<span className="text-sm text-gray-600">
                 {provider.location.city}, {provider.location.state}
               </span>
             </div>
@@ -57,7 +57,7 @@ const ProviderCard = ({ provider }) => {
         
         <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
           <div className="flex items-center gap-1">
-            <ApperIcon name="Calendar" className="w-4 h-4" />
+<ApperIcon name="Calendar" className="w-4 h-4" />
             <span>{provider.availability.waitTime}</span>
           </div>
           <div className="flex items-center gap-1">
@@ -74,7 +74,7 @@ const ProviderCard = ({ provider }) => {
           </Link>
           <Button
             variant="outline"
-            icon="Phone"
+icon="Phone"
             onClick={() => window.open(`tel:${provider.contactInfo.phone}`)}
           />
         </div>

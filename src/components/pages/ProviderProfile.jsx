@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
-import Loading from "@/components/ui/Loading";
+import Button from "@/components/atoms/Button";
 import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import Providers from "@/components/pages/Providers";
 import providerService from "@/services/api/providerService";
 
 const ProviderProfile = () => {
@@ -90,7 +91,7 @@ const ProviderProfile = () => {
             className="bg-gradient-to-r from-primary-50 to-secondary-50 px-8 py-12"
           >
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <img
+<img
                 src={provider.photo}
                 alt={provider.name}
                 className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
@@ -115,11 +116,11 @@ const ProviderProfile = () => {
                     <span className="font-medium">{provider.rating}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <ApperIcon name="MapPin" className="w-5 h-5" />
+<ApperIcon name="MapPin" className="w-5 h-5" />
                     <span>{provider.location.city}, {provider.location.state}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <ApperIcon name="Calendar" className="w-5 h-5" />
+<ApperIcon name="Calendar" className="w-5 h-5" />
                     <span>{provider.availability.waitTime}</span>
                   </div>
                 </div>
@@ -128,7 +129,7 @@ const ProviderProfile = () => {
               <div className="flex flex-col gap-3">
                 <Button
                   variant="accent"
-                  icon="Phone"
+icon="Phone"
                   onClick={() => handleContact("phone", provider.contactInfo.phone)}
                 >
                   Call Now
@@ -149,8 +150,8 @@ const ProviderProfile = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <h2 className="text-2xl font-display font-bold text-gray-900 mb-4">
-                About {provider.name.split(" ")[1]}
+<h2 className="text-2xl font-display font-bold text-gray-900 mb-4">
+                About {provider.name.split(" ")[1] || provider.name}
               </h2>
               <p className="text-gray-700 leading-relaxed">
                 {provider.bio}
@@ -216,7 +217,7 @@ const ProviderProfile = () => {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   Location & Contact
-                </h3>
+</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-2">
                     <ApperIcon name="MapPin" className="w-5 h-5 text-gray-400 mt-0.5" />
@@ -276,13 +277,13 @@ const ProviderProfile = () => {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <ApperIcon name="Calendar" className="w-5 h-5 text-primary-600" />
-                  <span className="text-gray-700">
-                    Next available: {new Date(provider.availability.nextAvailable).toLocaleDateString()}
+<span className="text-gray-700">
+                    Next available: {provider.availability.nextAvailable ? new Date(provider.availability.nextAvailable).toLocaleDateString() : 'Not specified'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ApperIcon name="Clock" className="w-5 h-5 text-primary-600" />
-                  <span className="text-gray-700">
+<span className="text-gray-700">
                     Typical wait: {provider.availability.waitTime}
                   </span>
                 </div>
@@ -298,15 +299,15 @@ const ProviderProfile = () => {
             >
               <Button
                 variant="accent"
-                icon="Phone"
+icon="Phone"
                 onClick={() => handleContact("phone", provider.contactInfo.phone)}
                 className="flex-1"
               >
-                Call {provider.name.split(" ")[1]}
+                Call {provider.name.split(" ")[1] || provider.name}
               </Button>
               <Button
                 variant="outline"
-                icon="Mail"
+icon="Mail"
                 onClick={() => handleContact("email", provider.contactInfo.email)}
                 className="flex-1"
               >

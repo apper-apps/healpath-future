@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
-
+import { AuthContext } from '@/App';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { logout } = useContext(AuthContext);
 
   const navigation = [
     { name: "Find Providers", href: "/providers" },
@@ -17,6 +20,10 @@ const Header = () => {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
@@ -49,13 +56,24 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Link to="/apply-patient">
-              <Button variant="accent" size="sm">
-                Apply for Sponsorship
-              </Button>
-            </Link>
+{/* CTA Button and User Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            {isAuthenticated ? (
+              <>
+                <span className="text-sm text-gray-600">
+                  Welcome, {user?.firstName || user?.name || 'User'}
+                </span>
+                <Button variant="outline" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Link to="/apply-patient">
+                <Button variant="accent" size="sm">
+                  Apply for Sponsorship
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -90,12 +108,23 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="pt-2">
-                <Link to="/apply-patient" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="accent" size="sm" className="w-full">
-                    Apply for Sponsorship
-                  </Button>
-                </Link>
+<div className="pt-2">
+                {isAuthenticated ? (
+                  <div className="space-y-2">
+                    <div className="text-sm text-gray-600 px-4 py-2">
+                      Welcome, {user?.firstName || user?.name || 'User'}
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full" onClick={() => { handleLogout(); setIsMenuOpen(false); }}>
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Link to="/apply-patient" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="accent" size="sm" className="w-full">
+                      Apply for Sponsorship
+                    </Button>
+                  </Link>
+                )}
               </div>
             </nav>
           </motion.div>
