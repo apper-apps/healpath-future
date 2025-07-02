@@ -32,9 +32,8 @@
   .btn-accent {
     @apply bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-medium px-6 py-3 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg;
   }
-  
-  .card-hover {
-    @apply transition-all duration-200 hover:scale-102 hover:shadow-xl;
+.card-hover {
+    @apply transition-all duration-200 hover:scale-105 hover:shadow-xl;
   }
   
   .input-focus {

@@ -65,14 +65,18 @@ export default {
         },
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        pulseSoft: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.6' },
-        },
+'100%': { transform: 'translateY(0)', opacity: '1' },
+      },
+      pulseSoft: {
+        '0%, 100%': { opacity: '1' },
+        '50%': { opacity: '0.6' },
       },
     },
+    scale: {
+      '102': '1.02',
+      '103': '1.03',
+    },
   },
-  plugins: [],
+},
+plugins: [],
 }
