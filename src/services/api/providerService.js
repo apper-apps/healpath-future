@@ -6,8 +6,28 @@ class ProviderService {
 this.tableName = 'provider';
   }
 
-  getApperClient() {
+getApperClient() {
+    // Check if ApperSDK is available
+    if (!window.ApperSDK) {
+      throw new Error('Apper SDK is not loaded. Please ensure the SDK script is included in index.html');
+    }
+    
     const { ApperClient } = window.ApperSDK;
+    
+    // Check if ApperClient is available
+    if (!ApperClient) {
+      throw new Error('ApperClient is not available in the SDK');
+    }
+    
+    // Validate environment variables
+    if (!import.meta.env.VITE_APPER_PROJECT_ID) {
+      throw new Error('VITE_APPER_PROJECT_ID is not defined in environment variables');
+    }
+    
+    if (!import.meta.env.VITE_APPER_PUBLIC_KEY) {
+      throw new Error('VITE_APPER_PUBLIC_KEY is not defined in environment variables');
+    }
+    
     return new ApperClient({
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
       apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
