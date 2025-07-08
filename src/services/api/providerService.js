@@ -3,12 +3,15 @@ import { toast } from 'react-toastify';
 class ProviderService {
   constructor() {
     // Initialize ApperClient with Project ID and Public Key
+this.tableName = 'provider';
+  }
+
+  getApperClient() {
     const { ApperClient } = window.ApperSDK;
-    this.apperClient = new ApperClient({
+    return new ApperClient({
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
       apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
     });
-    this.tableName = 'provider';
   }
 
   async getAll(filters = {}) {
