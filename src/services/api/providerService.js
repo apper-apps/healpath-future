@@ -5,11 +5,16 @@ import Error from "@/components/ui/Error";
 class ProviderService {
 constructor() {
     // Initialize ApperClient with Project ID and Public Key
-    const { ApperClient } = window.ApperSDK;
-    this.apperClient = new ApperClient({
-      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
-      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
-    });
+    // Add null check to prevent destructuring error when SDK is not yet loaded
+    if (window.ApperSDK) {
+      const { ApperClient } = window.ApperSDK;
+      this.apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+    } else {
+      this.apperClient = null;
+    }
     this.tableName = 'provider';
   }
 
