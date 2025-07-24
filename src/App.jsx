@@ -49,7 +49,7 @@ function App() {
       target: '#authentication',
       clientId: import.meta.env.VITE_APPER_PROJECT_ID,
       view: 'both',
-      onSuccess: function (user) {
+onSuccess: function (user) {
         setIsInitialized(true);
         // CRITICAL: This exact currentPath logic must be preserved in all implementations
         // DO NOT simplify or modify this pattern as it ensures proper redirection flow
@@ -58,6 +58,13 @@ function App() {
         const isAuthPage = currentPath.includes('/login') || currentPath.includes('/signup') || 
                            currentPath.includes('/callback') || currentPath.includes('/error') || 
                            currentPath.includes('/prompt-password') || currentPath.includes('/reset-password');
+        
+        // Define public routes that don't require authentication
+        const publicRoutes = ['/', '/providers', '/ai-search', '/sponsorship', '/resources', '/apply-patient', '/apply-practitioner'];
+        const isPublicRoute = publicRoutes.some(route => {
+          const pathOnly = currentPath.split('?')[0];
+          return pathOnly === route || (route === '/providers' && pathOnly.startsWith('/providers/'));
+        });
         
         if (user) {
           // User is authenticated
@@ -76,7 +83,10 @@ function App() {
           dispatch(setUser(JSON.parse(JSON.stringify(user))));
         } else {
           // User is not authenticated
-          if (!isAuthPage) {
+          if (isPublicRoute) {
+            // Allow access to public routes without authentication
+            navigate(currentPath);
+          } else if (!isAuthPage) {
             navigate(
               currentPath.includes('/signup')
                 ? `/signup?redirect=${currentPath}`
