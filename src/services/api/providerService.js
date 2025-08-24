@@ -15,9 +15,9 @@ constructor() {
   }
   
   // Check authentication state before API operations
-  checkAuthentication() {
-    // Get Redux store state
-    
+checkAuthentication() {
+    // Get Redux store state from global window object
+    const store = window.__REDUX_STORE__;
     if (store) {
       const state = store.getState();
       return state.user?.isAuthenticated;
@@ -28,7 +28,7 @@ constructor() {
     return !!userData;
   }
   
-  // Initialize ApperClient with authentication check
+// Initialize ApperClient with authentication check
   initializeApperClient() {
     if (!this.checkAuthentication()) {
       throw new Error('Authentication required. Please log in to continue.');
@@ -43,7 +43,6 @@ constructor() {
     }
     
     return this.apperClient;
-    this.tableName = 'provider';
   }
 
   // Transform flat database fields to nested UI format
@@ -563,7 +562,8 @@ constructor() {
     }
   }
 
-getApperClient() {
+// Get ApperClient instance with proper validation
+  getApperClient() {
     // Check authentication first
     if (!this.checkAuthentication()) {
       throw new Error('Authentication required. Please log in to access provider data.');
@@ -593,7 +593,7 @@ getApperClient() {
     return new ApperClient({
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
       apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
-    });
+});
   }
 
   async searchBySymptoms(symptoms) {
@@ -638,6 +638,19 @@ getApperClient() {
     }
   }
 
+  async getFeaturedUpdated() {
+    try {
+      const filters = {
+        minRating: 4.8
+      };
+      return await this.getAll(filters);
+    } catch (error) {
+      console.error("Error getting featured providers:", error);
+      toast.error("Failed to load featured providers");
+      return [];
+    }
+  }
+}
   async getFeaturedUpdated() {
     try {
       const filters = {

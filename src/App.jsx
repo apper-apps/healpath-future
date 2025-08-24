@@ -1,28 +1,29 @@
-import { createContext, useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { createContext, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { setUser, clearUser } from '@/store/userSlice';
+import store from "@/store/store";
+import { clearUser, setUser } from "@/store/userSlice";
 import Layout from "@/components/Layout";
+import PromptPassword from "@/components/pages/PromptPassword";
+import PractitionerApplication from "@/components/pages/PractitionerApplication";
+import Login from "@/components/pages/Login";
+import ResetPassword from "@/components/pages/ResetPassword";
+import Callback from "@/components/pages/Callback";
+import ErrorPage from "@/components/pages/ErrorPage";
+import SponsorshipProgram from "@/components/pages/SponsorshipProgram";
+import PatientApplication from "@/components/pages/PatientApplication";
+import Signup from "@/components/pages/Signup";
+import ProviderProfile from "@/components/pages/ProviderProfile";
+import Resources from "@/components/pages/Resources";
+import AISearch from "@/components/pages/AISearch";
+import Providers from "@/components/pages/Providers";
+import Home from "@/components/pages/Home";
 // Make Redux store available globally for services
 window.__REDUX_STORE__ = null;
 // Authentication Pages
-import Login from '@/components/pages/Login';
-import Signup from '@/components/pages/Signup';
-import Callback from '@/components/pages/Callback';
-import ErrorPage from '@/components/pages/ErrorPage';
-import ResetPassword from '@/components/pages/ResetPassword';
-import PromptPassword from '@/components/pages/PromptPassword';
 
 // Application Pages
-import Home from "@/components/pages/Home";
-import Providers from "@/components/pages/Providers";
-import ProviderProfile from "@/components/pages/ProviderProfile";
-import AISearch from "@/components/pages/AISearch";
-import SponsorshipProgram from "@/components/pages/SponsorshipProgram";
-import PatientApplication from "@/components/pages/PatientApplication";
-import PractitionerApplication from "@/components/pages/PractitionerApplication";
-import Resources from "@/components/pages/Resources";
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -116,9 +117,9 @@ onSuccess: function (user) {
       }
 });
     
-    // Make store available globally for authentication checks in services
+// Make store available globally for authentication checks in services
+    window.__REDUX_STORE__ = store;
   }, []);// No props and state should be bound
-  
   // Authentication methods to share via context
   const authMethods = {
     isInitialized,
