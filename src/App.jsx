@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from "react-toastify";
 import { setUser, clearUser } from '@/store/userSlice';
 import Layout from "@/components/Layout";
-
+// Make Redux store available globally for services
+window.__REDUX_STORE__ = null;
 // Authentication Pages
 import Login from '@/components/pages/Login';
 import Signup from '@/components/pages/Signup';
@@ -113,7 +114,13 @@ onSuccess: function (user) {
       onError: function(error) {
         console.error("Authentication failed:", error);
       }
-    });
+});
+    
+    // Make store available globally for authentication checks in services
+    const store = useSelector(state => state);
+    useEffect(() => {
+      window.__REDUX_STORE__ = { getState: () => store };
+    }, [store]);
   }, []);// No props and state should be bound
   
   // Authentication methods to share via context

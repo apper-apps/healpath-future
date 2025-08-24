@@ -4,17 +4,44 @@ import Error from "@/components/ui/Error";
 
 class ProviderService {
 constructor() {
+    // Initialize ApperClient only when authenticated
+    this.apperClient = null;
+    this.tableName = 'provider';
     // Initialize ApperClient with Project ID and Public Key
     // Add null check to prevent destructuring error when SDK is not yet loaded
-    if (window.ApperSDK) {
+// ApperClient will be initialized when needed with authentication check
+  }
+  
+  // Check authentication state before API operations
+  checkAuthentication() {
+    // Get Redux store state
+    const store = window.__REDUX_STORE__ || document.getElementById('root').__reactInternalInstance?.memoizedProps?.store;
+    
+    if (store) {
+      const state = store.getState();
+      return state.user?.isAuthenticated;
+    }
+    
+    // Fallback: check if user data exists in sessionStorage or localStorage
+    const userData = sessionStorage.getItem('user') || localStorage.getItem('user');
+    return !!userData;
+  }
+  
+  // Initialize ApperClient with authentication check
+  initializeApperClient() {
+    if (!this.checkAuthentication()) {
+      throw new Error('Authentication required. Please log in to continue.');
+    }
+    
+    if (!this.apperClient && window.ApperSDK) {
       const { ApperClient } = window.ApperSDK;
       this.apperClient = new ApperClient({
         apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
         apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
       });
-    } else {
-      this.apperClient = null;
     }
+    
+    return this.apperClient;
     this.tableName = 'provider';
   }
 
@@ -178,8 +205,13 @@ constructor() {
         });
       }
 
-      const response = await this.apperClient.fetchRecords(this.tableName, params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
       
+      const response = await client.fetchRecords(this.tableName, params);
       if (!response.success) {
         console.error('Failed to fetch providers:', response.message);
         toast.error(response.message);
@@ -230,8 +262,13 @@ constructor() {
         ]
       };
 
-      const response = await this.apperClient.getRecordById(this.tableName, parseInt(id), params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
       
+      const response = await client.getRecordById(this.tableName, parseInt(id), params);
       if (!response.success) {
         console.error(`Failed to fetch provider with ID ${id}:`, response.message);
         toast.error(response.message);
@@ -288,8 +325,13 @@ constructor() {
         records: [updateableData]
       };
 
-      const response = await this.apperClient.createRecord(this.tableName, params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
       
+      const response = await client.createRecord(this.tableName, params);
       if (!response.success) {
         console.error('Failed to create provider:', response.message);
         toast.error(response.message);
@@ -362,8 +404,13 @@ constructor() {
       const params = {
         records: [updateableData]
       };
-
-      const response = await this.apperClient.updateRecord(this.tableName, params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
+      
+      const response = await client.updateRecord(this.tableName, params);
       
       if (!response.success) {
         console.error('Failed to update provider:', response.message);
@@ -410,8 +457,13 @@ constructor() {
       const params = {
         RecordIds: [parseInt(id)]
       };
-
-      const response = await this.apperClient.deleteRecord(this.tableName, params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
+      
+      const response = await client.deleteRecord(this.tableName, params);
       
       if (!response.success) {
         console.error('Failed to delete provider:', response.message);
@@ -483,8 +535,13 @@ constructor() {
         }
       };
 
-      const response = await this.apperClient.fetchRecords(this.tableName, params);
+// Ensure authentication and initialize client
+      const client = this.initializeApperClient();
+      if (!client) {
+        throw new Error('Unable to initialize API client. Please check your connection and try again.');
+      }
       
+      const response = await client.fetchRecords(this.tableName, params);
       if (!response.success) {
         console.error('Failed to fetch featured providers:', response.message);
         return [];
@@ -506,6 +563,11 @@ constructor() {
   }
 
 getApperClient() {
+    // Check authentication first
+    if (!this.checkAuthentication()) {
+      throw new Error('Authentication required. Please log in to access provider data.');
+    }
+    
     // Check if ApperSDK is available
     if (!window.ApperSDK) {
       throw new Error('Apper SDK is not loaded. Please ensure the SDK script is included in index.html');
