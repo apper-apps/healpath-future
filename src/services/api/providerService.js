@@ -651,19 +651,6 @@ checkAuthentication() {
     }
   }
 }
-  async getFeaturedUpdated() {
-    try {
-      const filters = {
-        minRating: 4.8
-      };
-      return await this.getAll(filters);
-    } catch (error) {
-      console.error("Error getting featured providers:", error);
-      toast.error("Failed to load featured providers");
-      return [];
-    }
-  }
-}
 
 // Create and export a singleton instance
 const providerService = new ProviderService();
