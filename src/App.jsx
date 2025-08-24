@@ -117,10 +117,6 @@ onSuccess: function (user) {
 });
     
     // Make store available globally for authentication checks in services
-    const store = useSelector(state => state);
-    useEffect(() => {
-      window.__REDUX_STORE__ = { getState: () => store };
-    }, [store]);
   }, []);// No props and state should be bound
   
   // Authentication methods to share via context

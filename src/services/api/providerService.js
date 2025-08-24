@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import React from "react";
+import store from "@/store/store";
 import Error from "@/components/ui/Error";
+import providerService from "@/services/mockData/providers.json";
 
 class ProviderService {
 constructor() {
@@ -15,7 +17,6 @@ constructor() {
   // Check authentication state before API operations
   checkAuthentication() {
     // Get Redux store state
-    const store = window.__REDUX_STORE__ || document.getElementById('root').__reactInternalInstance?.memoizedProps?.store;
     
     if (store) {
       const state = store.getState();
